@@ -6,13 +6,22 @@ import 'package:fire_one/social_cubit/states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
 
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  @override
+  void initState() {
+    SocialCubit.get(context).getUsers();
+    // SocialCubit.get(context).getUsers();
+    super.initState();
+  }
+
 //  late SocialPostsModel model ;
-
-  // ChatScreen(this.model)
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SocialCubit, SocialStates>(
@@ -21,7 +30,7 @@ class ChatScreen extends StatelessWidget {
         var cubit = SocialCubit.get(context);
         return Scaffold(
           // body: Center(child: Text('data'),),
-          body: cubit.users.length > 0
+          body: cubit.users.isNotEmpty
               ? ListView.separated(
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) => chatItem(
@@ -52,7 +61,7 @@ class ChatScreen extends StatelessWidget {
         },
         child: Padding(
           padding: const EdgeInsets.all(20.0),
-          child: Container(
+          child: SizedBox(
             height: 70,
             // color: Colors.grey[300],
             child: Row(
@@ -80,7 +89,7 @@ class ChatScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 5),
                   child: Text(
                     '${model.name}',
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
               ],

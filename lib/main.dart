@@ -47,7 +47,7 @@ void main(List<String> args) async {
     () async {
       await CachHelper.init();
 
-      // uId = CachHelper.getData(key: 'uId', value: uId!);
+      uId = CachHelper.getData(key: 'uId', value: uId ?? "");
       Widget widget;
       print('user is $user');
       if (user != null) {
@@ -79,8 +79,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => SocialCubit()
-        ..getUserData()
-        ..getPosts(),
+        // ..getUserData()
+        // ..getPosts(),
+        ,
       child: BlocConsumer<SocialCubit, SocialStates>(
         listener: (context, state) {},
         builder: (context, state) {

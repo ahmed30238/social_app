@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 var user = FirebaseAuth.instance.currentUser;
-String? uId = user!.uid;
+String? uId = user?.uid;
 
 
 

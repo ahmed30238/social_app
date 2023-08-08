@@ -62,7 +62,7 @@ class SettingsScreen extends StatelessWidget {
                   Center(
                     child: Text(
                       '${model.name}',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                   const SizedBox(
@@ -72,7 +72,7 @@ class SettingsScreen extends StatelessWidget {
                     child: Text(
                       '${model.bio}',
                       // 'ahmed',
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
                   const SizedBox(
@@ -87,11 +87,11 @@ class SettingsScreen extends StatelessWidget {
                             children: [
                               Text(
                                 '100',
-                                style: Theme.of(context).textTheme.bodyText1,
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               Text(
                                 'Posts',
-                                style: Theme.of(context).textTheme.caption,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
                           ),
@@ -104,11 +104,11 @@ class SettingsScreen extends StatelessWidget {
                             children: [
                               Text(
                                 '265',
-                                style: Theme.of(context).textTheme.bodyText1,
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               Text(
                                 'Photos',
-                                style: Theme.of(context).textTheme.caption,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
                           ),
@@ -121,11 +121,11 @@ class SettingsScreen extends StatelessWidget {
                             children: [
                               Text(
                                 '99',
-                                style: Theme.of(context).textTheme.bodyText1,
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               Text(
                                 'Following',
-                                style: Theme.of(context).textTheme.caption,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
                           ),
@@ -138,11 +138,11 @@ class SettingsScreen extends StatelessWidget {
                             children: [
                               Text(
                                 '10k',
-                                style: Theme.of(context).textTheme.bodyText1,
+                                style: Theme.of(context).textTheme.bodyLarge,
                               ),
                               Text(
                                 'Follower',
-                                style: Theme.of(context).textTheme.caption,
+                                style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
                           ),

@@ -61,6 +61,7 @@ class SocialLoginScreen extends StatelessWidget {
                             if (value!.isEmpty) {
                               return 'too short';
                             }
+                            return null;
                           },
                           controller: emailController,
                           obscureText: false,
@@ -87,6 +88,7 @@ class SocialLoginScreen extends StatelessWidget {
                             if (value!.isEmpty) {
                               return 'too short';
                             }
+                            return null;
                           },
                           controller: passwordController,
                           obscureText: pass,

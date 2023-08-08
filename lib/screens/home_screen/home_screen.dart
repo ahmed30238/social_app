@@ -5,9 +5,20 @@ import 'package:fire_one/social_cubit/states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    SocialCubit.get(context).getUserData();
+    SocialCubit.get(context).getPosts();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SocialCubit, SocialStates>(
@@ -45,7 +56,7 @@ class HomeScreen extends StatelessWidget {
                                   'Communicate With Friends',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyText1!
+                                      .bodyLarge!
                                       .copyWith(color: Colors.white),
                                 ),
                               )
@@ -113,7 +124,7 @@ Widget buildPostItem(SocialPostsModel model, context, index) => Card(
                         children: [
                           Text(
                             '${model.name}',
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 5),
@@ -126,7 +137,7 @@ Widget buildPostItem(SocialPostsModel model, context, index) => Card(
                       ),
                       Text(
                         '${model.dateTime}',
-                        style: Theme.of(context).textTheme.caption,
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
                   ),
@@ -151,7 +162,7 @@ Widget buildPostItem(SocialPostsModel model, context, index) => Card(
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 '${model.text}',
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
             Padding(
@@ -234,11 +245,11 @@ Widget buildPostItem(SocialPostsModel model, context, index) => Card(
                   Expanded(
                     child: InkWell(
                       onTap: () {},
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
+                          children: [
                             Icon(
                               IconBroken.Chat,
                               color: Colors.amber,
@@ -296,10 +307,10 @@ Widget buildPostItem(SocialPostsModel model, context, index) => Card(
                               SocialCubit.get(context).postId[index],
                             );
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10),
                             child: Row(
-                              children: const [
+                              children: [
                                 Icon(
                                   IconBroken.Heart,
                                   color: Colors.red,
