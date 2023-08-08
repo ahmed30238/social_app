@@ -25,7 +25,7 @@ class SocialRegisterScreen extends StatelessWidget {
             SocialCubit.get(context).getUserData();
             navigateAndFinishTo(
               context,
-              HomeLayout(),
+              const HomeLayout(),
             );
           }
         },
@@ -66,6 +66,7 @@ class SocialRegisterScreen extends StatelessWidget {
                             if (value!.isEmpty) {
                               return 'too short';
                             }
+                            return null;
                           },
                           controller: nameController,
                           obscureText: false,
@@ -84,6 +85,7 @@ class SocialRegisterScreen extends StatelessWidget {
                             if (value!.isEmpty) {
                               return 'too short';
                             }
+                            return null;
                           },
                           controller: emailController,
                           obscureText: false,
@@ -104,6 +106,7 @@ class SocialRegisterScreen extends StatelessWidget {
                             if (value!.isEmpty) {
                               return 'too short';
                             }
+                            return null;
                           },
                           prefix: Icons.phone,
                           isPass: false,
@@ -116,6 +119,7 @@ class SocialRegisterScreen extends StatelessWidget {
                             if (value!.isEmpty) {
                               return 'too short';
                             }
+                            return null;
                           },
                           controller: passwordController,
                           obscureText: cubit.isShown,

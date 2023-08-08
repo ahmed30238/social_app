@@ -71,7 +71,7 @@ class AddPostScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
                         '${SocialCubit.get(context).userModel!.name}',
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ),
                   ],
@@ -132,9 +132,9 @@ class AddPostScreen extends StatelessWidget {
                         onPressed: () {
                           SocialCubit.get(context).getPostImage();
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(
                               IconBroken.Camera,
                             ),

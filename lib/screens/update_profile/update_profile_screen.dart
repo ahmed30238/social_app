@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:fire_one/screens/settings_screen/setings_screen.dart';
 import 'package:fire_one/shared/componets/components.dart';
 import 'package:fire_one/shared/styles/icon_broken.dart';
 import 'package:fire_one/social_cubit/cubit.dart';
@@ -147,7 +145,7 @@ class UpdateProfleScreen extends StatelessWidget {
                   Center(
                     child: Text(
                       '${userModel.name}',
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
                   const SizedBox(
@@ -156,7 +154,7 @@ class UpdateProfleScreen extends StatelessWidget {
                   Center(
                     child: Text(
                       '${userModel.bio}',
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
                   const SizedBox(
@@ -242,7 +240,9 @@ class UpdateProfleScreen extends StatelessWidget {
                   defaultTextFormField(
                     controller: nameController,
                     text: 'Name',
-                    validate: (String? value) {},
+                    validate: (String? value) {
+                      return null;
+                    },
                     prefix: IconBroken.User1,
                     isPass: false,
                   ),
@@ -253,7 +253,9 @@ class UpdateProfleScreen extends StatelessWidget {
                     keyType: TextInputType.phone,
                     controller: phoneController,
                     text: 'Phone',
-                    validate: (String? value) {},
+                    validate: (String? value) {
+                      return null;
+                    },
                     prefix: IconBroken.Call,
                     isPass: false,
                   ),
@@ -263,7 +265,9 @@ class UpdateProfleScreen extends StatelessWidget {
                   defaultTextFormField(
                     controller: bioController,
                     text: 'Bio',
-                    validate: (String? value) {},
+                    validate: (String? value) {
+                      return null;
+                    },
                     prefix: IconBroken.Info_Circle,
                     isPass: false,
                   ),
@@ -273,7 +277,9 @@ class UpdateProfleScreen extends StatelessWidget {
                   defaultTextFormField(
                     controller: passwordController,
                     text: 'password',
-                    validate: (String? value) {},
+                    validate: (String? value) {
+                      return null;
+                    },
                     prefix: IconBroken.Info_Circle,
                     isPass: true,
                     maxLines: 1

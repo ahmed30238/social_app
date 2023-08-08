@@ -8,7 +8,6 @@ import 'package:fire_one/screens/home_screen/home_screen.dart';
 import 'package:fire_one/screens/post_screen/post_screen.dart';
 import 'package:fire_one/screens/settings_screen/setings_screen.dart';
 import 'package:fire_one/screens/users_screen/users_screen.dart';
-import 'package:fire_one/shared/constants/local/shared_pref.dart';
 import 'package:fire_one/shared/constants/local/vars.dart';
 import 'package:fire_one/shared/styles/icon_broken.dart';
 import 'package:fire_one/social_cubit/states.dart';
@@ -374,14 +373,12 @@ class SocialCubit extends Cubit<SocialStates> {
   void getUsers() {
     if (users.isEmpty) {
       FirebaseFirestore.instance.collection('users').get().then((value) {
-        value.docs.forEach(
-          (element) {
+        for (var element in value.docs) {
             if (element.id != userModel!.uId) {
               users.add(SocialUserModel.fromJson(element.data()));
             }
             emit(SocialGetUserSucessState());
-          },
-        );
+          }
       }).catchError((error) {
         emit(SocialGetUserErrorState());
       });
