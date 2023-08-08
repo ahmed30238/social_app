@@ -57,13 +57,9 @@ class SocialLoginScreen extends StatelessWidget {
                           height: 40,
                         ),
                         TextFormField(
-                          validator: (String? value) {
-                            if (value!.isEmpty) {
-                              return 'too short';
-                            }
-                            return null;
-                          },
+                          validator: validateEmail,
                           controller: emailController,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
                           obscureText: false,
                           keyboardType: TextInputType.emailAddress,
                           decoration: const InputDecoration(
@@ -186,11 +182,21 @@ class SocialLoginScreen extends StatelessWidget {
               uId = value.user!.uid;
               CachHelper.saveData(key: 'uId', value: uId);
               navigateAndFinishTo(context, const HomeLayout());
-              SocialCubit.get(context).getUserData();
+              // SocialCubit.get(context).getUserData();
             });
           }
         },
       ),
     );
   }
+}
+
+String? validateEmail(String? value) {
+  String patten = r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+';
+  RegExp regex = RegExp(patten);
+
+  if (!regex.hasMatch(value!)) {
+    return "Not Valid";
+  }
+  return null;
 }

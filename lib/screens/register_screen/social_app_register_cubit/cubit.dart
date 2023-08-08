@@ -23,6 +23,7 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
 
     emit(ShowRegisterPassState());
   }
+
   void userData({
     required String email,
     required String password,
@@ -68,11 +69,9 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
       name: name,
       phone: phone,
       password: password,
-      bio: 'write your bio...',
-      image:
-          'https://student.valuxapps.com/storage/uploads/banners/1641000140NnSq9.black-friday-cyber-monday-sales.jpg',
-      cover:
-          'https://student.valuxapps.com/storage/uploads/banners/1641000140NnSq9.black-friday-cyber-monday-sales.jpg',
+      bio: bio ?? 'write your bio...',
+      image: image ?? 'assets/images/default_image.png',
+      cover: cover ?? 'assets/images/default_image.png',
     );
 
     FirebaseFirestore.instance
