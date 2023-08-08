@@ -17,6 +17,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     SocialCubit.get(context).getUsers();
+    SocialCubit.get(context).getUserData();
     // SocialCubit.get(context).getUsers();
     super.initState();
   }
@@ -29,7 +30,6 @@ class _ChatScreenState extends State<ChatScreen> {
       builder: (context, state) {
         var cubit = SocialCubit.get(context);
         return Scaffold(
-          // body: Center(child: Text('data'),),
           body: cubit.users.isNotEmpty
               ? ListView.separated(
                   physics: const BouncingScrollPhysics(),
