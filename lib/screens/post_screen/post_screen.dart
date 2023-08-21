@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AddPostScreen extends StatelessWidget {
   AddPostScreen({Key? key}) : super(key: key);
 
-  var postController = TextEditingController();
+  final TextEditingController postController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
