@@ -5,7 +5,6 @@ import 'package:fire_one/screens/register_screen/register.dart';
 import 'package:fire_one/shared/componets/components.dart';
 import 'package:fire_one/shared/constants/local/shared_pref.dart';
 import 'package:fire_one/shared/constants/local/vars.dart';
-import 'package:fire_one/social_cubit/cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SocialLoginScreen extends StatelessWidget {
   SocialLoginScreen({Key? key}) : super(key: key);
 
-  var formKey = GlobalKey<FormState>();
+ final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {

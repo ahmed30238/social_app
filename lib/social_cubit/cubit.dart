@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fire_one/models/message_model.dart';
 import 'package:fire_one/models/posts.model.dart';
@@ -77,9 +78,8 @@ class SocialCubit extends Cubit<SocialStates> {
   SocialUserModel? userModel;
   SocialPostsModel? postModel;
 
-    // uId = CachHelper.getData(key: 'uId', value: userModel!.uId!);
+  // uId = CachHelper.getData(key: 'uId', value: userModel!.uId!);
   void getUserData() {
-
     emit(SocialGetUserDataLoadingState());
     FirebaseFirestore.instance.collection('users').doc(uId).get().then((value) {
       // FirebaseAuth.instance.currentUser!.reload(); // test
@@ -374,11 +374,11 @@ class SocialCubit extends Cubit<SocialStates> {
     if (users.isEmpty) {
       FirebaseFirestore.instance.collection('users').get().then((value) {
         for (var element in value.docs) {
-            if (element.id != userModel!.uId) {
-              users.add(SocialUserModel.fromJson(element.data()));
-            }
-            emit(SocialGetUserSucessState());
+          if (element.id != userModel!.uId) {
+            users.add(SocialUserModel.fromJson(element.data()));
           }
+          emit(SocialGetUserSucessState());
+        }
       }).catchError((error) {
         emit(SocialGetUserErrorState());
       });

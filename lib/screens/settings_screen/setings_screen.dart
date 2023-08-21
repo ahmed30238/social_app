@@ -1,3 +1,4 @@
+import 'package:fire_one/screens/settings_screen/profile_image_view.dart';
 import 'package:fire_one/screens/update_profile/update_profile_screen.dart';
 import 'package:fire_one/shared/componets/components.dart';
 import 'package:fire_one/shared/styles/icon_broken.dart';
@@ -31,28 +32,46 @@ class SettingsScreen extends StatelessWidget {
                       ),
                       Container(
                         height: MediaQuery.of(context).size.height / 4,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
                             topRight: Radius.circular(5),
                             topLeft: Radius.circular(5),
                           ),
                           image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                              '${model!.cover}',
-                            ),
-                          ),
+                              fit: BoxFit.cover,
+                              image:
+                                  // model?.cover != ""
+                                  //     ? NetworkImage(
+                                  //         model?.cover ?? "",
+                                  //       )
+                                  //     :
+                                  AssetImage(
+                                "assets/images/default_image.png",
+                              )
+                              // as ImageProvider,
+                              ),
                         ),
                       ),
-                      Positioned(
-                        bottom: 5,
-                        child: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          radius: 84,
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ProfileImageView(image: model?.image ?? ""),
+                            ),
+                          );
+                        },
+                        child: Positioned(
+                          bottom: 5,
                           child: CircleAvatar(
-                            radius: 80,
-                            backgroundImage: NetworkImage(
-                              '${model.image}',
+                            backgroundColor: Colors.white,
+                            radius: 84,
+                            child: CircleAvatar(
+                              radius: 80,
+                              backgroundImage: NetworkImage(
+                                '${model?.image}',
+                              ),
                             ),
                           ),
                         ),
@@ -61,7 +80,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      '${model.name}',
+                      model?.name ?? "",
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                   ),
@@ -70,14 +89,12 @@ class SettingsScreen extends StatelessWidget {
                   ),
                   Center(
                     child: Text(
-                      '${model.bio}',
+                      model?.bio ?? "",
                       // 'ahmed',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       Expanded(
@@ -150,9 +167,7 @@ class SettingsScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
                       Expanded(
@@ -163,16 +178,12 @@ class SettingsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 8,
-                      ),
+                      const SizedBox(width: 8),
                       OutlinedButton(
                         onPressed: () {
                           navigateTo(context, UpdateProfleScreen());
                         },
-                        child: const Icon(
-                          IconBroken.Edit,
-                        ),
+                        child: const Icon(IconBroken.Edit),
                       ),
                     ],
                   )
