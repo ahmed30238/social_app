@@ -8,10 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class UpdateProfleScreen extends StatelessWidget {
   UpdateProfleScreen({Key? key}) : super(key: key);
 
-  var nameController = TextEditingController();
-  var phoneController = TextEditingController();
-  var bioController = TextEditingController();
-  var passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +37,10 @@ class UpdateProfleScreen extends StatelessWidget {
                 child: TextButton(
                   onPressed: () {
                     SocialCubit.get(context).updateUser(
-                      bio: bioController.text,
-                      name: nameController.text,
-                      phone: phoneController.text,
-                      password: passwordController.text
-                    );
+                        bio: bioController.text,
+                        name: nameController.text,
+                        phone: phoneController.text,
+                        password: passwordController.text);
                     Navigator.pop(context);
                   },
                   child: const Text(
@@ -176,11 +175,11 @@ class UpdateProfleScreen extends StatelessWidget {
                                     onPressed: () {
                                       SocialCubit.get(context)
                                           .uploadProfileImage(
-                                        bio: bioController.text,
-                                        phone: phoneController.text,
-                                        name: nameController.text,
-                                        password: passwordController.text
-                                      );
+                                              bio: bioController.text,
+                                              phone: phoneController.text,
+                                              name: nameController.text,
+                                              password:
+                                                  passwordController.text);
                                     },
                                     child: const Text(
                                       'Save Profile Image',
@@ -275,15 +274,14 @@ class UpdateProfleScreen extends StatelessWidget {
                     height: 10,
                   ),
                   defaultTextFormField(
-                    controller: passwordController,
-                    text: 'password',
-                    validate: (String? value) {
-                      return null;
-                    },
-                    prefix: IconBroken.Info_Circle,
-                    isPass: true,
-                    maxLines: 1
-                  ),
+                      controller: passwordController,
+                      text: 'password',
+                      validate: (String? value) {
+                        return null;
+                      },
+                      prefix: IconBroken.Info_Circle,
+                      isPass: true,
+                      maxLines: 1),
                 ],
               ),
             ),

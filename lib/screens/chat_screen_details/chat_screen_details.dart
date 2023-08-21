@@ -8,17 +8,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatScreenDetails extends StatelessWidget {
   // const ChatScreenDetails({Key? key}) : super(key: key);
-  SocialUserModel userModel;
   // String? id = userModel.uId;
-  ChatScreenDetails(this.userModel, {super.key});
+  const ChatScreenDetails({this.userModel, super.key});
 
-  var messageController = TextEditingController();
+  final SocialUserModel? userModel;
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController messageController = TextEditingController();
     return Builder(
       builder: (BuildContext context) {
-        SocialCubit.get(context).getMesages(receiverId: userModel.uId!);
+        SocialCubit.get(context).getMesages(receiverId: userModel?.uId ?? "");
         return BlocConsumer<SocialCubit, SocialStates>(
           listener: (context, state) {},
           builder: (context, state) {
@@ -30,13 +30,13 @@ class ChatScreenDetails extends StatelessWidget {
                     children: [
                       CircleAvatar(
                         backgroundImage: NetworkImage(
-                          '${userModel.image}',
+                          userModel?.image ?? "",
                         ),
                       ),
                       const SizedBox(
                         width: 10,
                       ),
-                      Text('${userModel.name}'),
+                      Text(userModel?.name ?? ""),
                     ],
                   )),
               body: cubit.messages.isNotEmpty
@@ -72,6 +72,7 @@ class ChatScreenDetails extends StatelessWidget {
                               children: [
                                 Expanded(
                                   child: TextFormField(
+                                    // ignore: deprecated_member_use
                                     toolbarOptions: const ToolbarOptions(
                                       copy: true,
                                       paste: true,
@@ -80,7 +81,7 @@ class ChatScreenDetails extends StatelessWidget {
                                     controller: messageController,
                                     onFieldSubmitted: (v) {
                                       cubit.sendMessage(
-                                        receiverId: userModel.uId!,
+                                        receiverId: userModel?.uId ?? "",
                                         dateTime: DateTime.now().toString(),
                                         text: v,
                                       );
@@ -101,7 +102,7 @@ class ChatScreenDetails extends StatelessWidget {
                                   child: MaterialButton(
                                     onPressed: () {
                                       cubit.sendMessage(
-                                        receiverId: userModel.uId!,
+                                        receiverId: userModel?.uId ?? "",
                                         dateTime: DateTime.now().toString(),
                                         text: messageController.text,
                                       );
@@ -151,7 +152,7 @@ class ChatScreenDetails extends StatelessWidget {
                                     controller: messageController,
                                     onFieldSubmitted: (v) {
                                       cubit.sendMessage(
-                                        receiverId: userModel.uId!,
+                                        receiverId: userModel?.uId ?? "",
                                         dateTime: DateTime.now().toString(),
                                         text: v,
                                       );
@@ -172,7 +173,7 @@ class ChatScreenDetails extends StatelessWidget {
                                   child: MaterialButton(
                                     onPressed: () {
                                       cubit.sendMessage(
-                                        receiverId: userModel.uId!,
+                                        receiverId: userModel?.uId ?? "",
                                         dateTime: DateTime.now().toString(),
                                         text: messageController.text,
                                       );

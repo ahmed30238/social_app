@@ -33,6 +33,7 @@ dependencies:
   image_pickers: ^2.0.4+1
   flash: ^3.0.5+1
   share_plus: ^7.1.0
+  dismissible_page: ^1.0.2
 
 
 dev_dependencies:

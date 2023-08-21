@@ -10,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print(message.data.toString());
@@ -79,13 +80,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => SocialCubit()
-        // ..getUserData()
-        // ..getPosts(),
-        ,
+      // ..getUserData()
+      // ..getPosts(),
+      ,
       child: BlocConsumer<SocialCubit, SocialStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          return MaterialApp(
+          return GetMaterialApp(
             debugShowCheckedModeBanner: false,
             home: startWidget,
           );

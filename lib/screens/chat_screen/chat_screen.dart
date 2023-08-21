@@ -57,7 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
   ) =>
       InkWell(
         onTap: () {
-          navigateTo(context, ChatScreenDetails(model));
+          navigateTo(context, ChatScreenDetails(userModel: model));
         },
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -70,20 +70,28 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(5.0),
-                  child: Container(
-                    height: 60,
-                    width: 60,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(60.0),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                          // '',
-                          '${model.image}',
+                  child: (model.image ?? "") != ""
+                      ? Container(
+                          height: 60,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(60.0),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: (model.image ?? "").startsWith("https")
+                                  ? NetworkImage(
+                                      model.image ?? "",
+                                    )
+                                  : const AssetImage(Images.defImage)
+                                      as ImageProvider,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          height: 60,
+                          width: 60,
+                          color: Colors.red,
                         ),
-                      ),
-                    ),
-                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -97,4 +105,9 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
       );
+}
+
+class Images {
+  Images._();
+  static const String defImage = "assets/images/default_image.png";
 }
