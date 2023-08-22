@@ -1,5 +1,6 @@
 import 'package:fire_one/models/message_model.dart';
 import 'package:fire_one/models/social_model.dart';
+import 'package:fire_one/screens/chat_screen/chat_screen.dart';
 import 'package:fire_one/shared/styles/icon_broken.dart';
 import 'package:fire_one/social_cubit/cubit.dart';
 import 'package:fire_one/social_cubit/states.dart';
@@ -29,9 +30,13 @@ class ChatScreenDetails extends StatelessWidget {
                   title: Row(
                     children: [
                       CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          userModel?.image ?? "",
-                        ),
+                        backgroundImage: !(userModel?.image ?? "")
+                                .contains("student.valuxapps.com")
+                            ? NetworkImage(
+                                userModel?.image ?? "",
+                              )
+                            : const AssetImage(Images.defImage)
+                                as ImageProvider,
                       ),
                       const SizedBox(
                         width: 10,
