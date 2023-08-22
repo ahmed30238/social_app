@@ -19,14 +19,15 @@ class _HomeScreenState extends State<HomeScreen> {
     SocialCubit.get(context).getPosts();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<SocialCubit, SocialStates>(
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          body: state is! SocialGetPostLoadingState 
-              &&  SocialCubit.get(context).posts.isNotEmpty
+          body: state is! SocialGetPostLoadingState &&
+                  SocialCubit.get(context).posts.isNotEmpty
               ? SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Column(
@@ -136,7 +137,7 @@ Widget buildPostItem(SocialPostsModel model, context, index) => Card(
                         ],
                       ),
                       Text(
-                        '${model.dateTime}',
+                        model.dateTime?.substring(0, 16) ?? "",
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -161,7 +162,7 @@ Widget buildPostItem(SocialPostsModel model, context, index) => Card(
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                '${model.text}',
+                model.text ?? "",
                 style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
@@ -201,7 +202,7 @@ Widget buildPostItem(SocialPostsModel model, context, index) => Card(
                 ),
               ),
             ),
-            if (model.postImage != '')
+            if (model.postImage != '') ...{
               Container(
                 height: 200,
                 width: double.infinity,
@@ -213,6 +214,7 @@ Widget buildPostItem(SocialPostsModel model, context, index) => Card(
                   ),
                 ),
               ),
+            },
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Row(
