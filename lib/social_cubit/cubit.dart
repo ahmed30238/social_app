@@ -17,6 +17,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:just_audio/just_audio.dart';
 
 class SocialCubit extends Cubit<SocialStates> {
   SocialCubit() : super(SocialInitState());
@@ -391,12 +392,15 @@ class SocialCubit extends Cubit<SocialStates> {
     required String dateTime,
     required String text,
   }) {
+    AudioPlayer player = AudioPlayer();
     messageModel = SocialMessageModel(
       dateTime: dateTime,
       receiverId: receiverId,
       text: text,
       senderId: userModel!.uId,
     );
+    player.setAsset("assets/sound/send.mp3");
+
 // set my chats
     FirebaseFirestore.instance
         .collection('users')
@@ -406,6 +410,7 @@ class SocialCubit extends Cubit<SocialStates> {
         .collection('messages')
         .add(messageModel!.toMap())
         .then((value) {
+      player.play();
       emit(SocialSendMessgaeSuccessState());
     }).catchError((error) {
       emit(SocialSendMessgaeErrorState());
@@ -420,6 +425,7 @@ class SocialCubit extends Cubit<SocialStates> {
         .collection('messages')
         .add(messageModel!.toMap())
         .then((value) {
+          // player.play();
       emit(SocialSendMessgaeSuccessState());
     }).catchError((error) {
       emit(SocialSendMessgaeErrorState());
