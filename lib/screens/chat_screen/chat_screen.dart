@@ -33,10 +33,12 @@ class _ChatScreenState extends State<ChatScreen> {
           body: cubit.users.isNotEmpty
               ? ListView.separated(
                   physics: const BouncingScrollPhysics(),
-                  itemBuilder: (context, index) => chatItem(
-                    context,
-                    SocialCubit.get(context).users[index],
-                  ),
+                  itemBuilder: (context, index) =>
+                      SocialCubit.get(context).users[index].name != null
+                          ? ChatItem(
+                              model: SocialCubit.get(context).users[index],
+                            )
+                          : const SizedBox(height: 0,),
                   separatorBuilder: (context, index) => Container(
                     height: 1,
                     color: Colors.grey,
@@ -50,54 +52,62 @@ class _ChatScreenState extends State<ChatScreen> {
       },
     );
   }
+}
 
-  Widget chatItem(
-    context,
-    SocialUserModel model,
-  ) =>
-      InkWell(
-        onTap: () {
-          navigateTo(context, ChatScreenDetails(userModel: model));
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: SizedBox(
-            height: 70,
-            // color: Colors.grey[300],
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(60.0),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: !(model.image ?? "student.valuxapps.com").contains("student.valuxapps.com")
-                              ? NetworkImage(
-                                  model.image ?? "",
-                                )
-                              : const AssetImage(Images.defImage)
-                                  as ImageProvider,
-                        ),
-                      ),
-                    )),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Text(
-                    '${model.name}',
-                    style: Theme.of(context).textTheme.bodyLarge,
+class ChatItem extends StatelessWidget {
+  final SocialUserModel model;
+  const ChatItem({
+    super.key,
+    required this.model,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        navigateTo(context, ChatScreenDetails(userModel: model));
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: SizedBox(
+          height: 70,
+          // color: Colors.grey[300],
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: !(model.image ?? "student.valuxapps.com")
+                              .contains("student.valuxapps.com")
+                          ? NetworkImage(
+                              model.image ?? "",
+                            )
+                          : const AssetImage(Images.defImage) as ImageProvider,
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: Text(
+                  '${model.name}',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 }
 
 class Images {

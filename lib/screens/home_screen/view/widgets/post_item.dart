@@ -1,98 +1,21 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fire_one/models/posts.model.dart';
 import 'package:fire_one/shared/styles/icon_broken.dart';
 import 'package:fire_one/social_cubit/cubit.dart';
-import 'package:fire_one/social_cubit/states.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    SocialCubit.get(context).getUserData();
-    SocialCubit.get(context).getPosts();
-    super.initState();
-  }
+class PostItem extends StatelessWidget {
+  final SocialPostsModel model;
+  final int index;
+  const PostItem({
+    super.key,
+    required this.index,
+    required this.model,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SocialCubit, SocialStates>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Scaffold(
-          body: state is! SocialGetPostLoadingState &&
-                  SocialCubit.get(context).posts.isNotEmpty
-              ? SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Card(
-                          elevation: 20,
-                          child: Stack(
-                            alignment: AlignmentDirectional.bottomEnd,
-                            children: [
-                              Container(
-                                height: 200,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  image: const DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: NetworkImage(
-                                        'https://img.freepik.com/premium-photo/border-collie-autumn-leaves-night_356194-2109.jpg'),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  'Communicate With Friends',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge!
-                                      .copyWith(color: Colors.white),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) => buildPostItem(
-                            SocialCubit.get(context).posts[index],
-                            context,
-                            index,
-                          ),
-                          separatorBuilder: (context, index) => const SizedBox(
-                            height: 1,
-                          ),
-                          itemCount: SocialCubit.get(context).posts.length,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : const Center(
-                  child: CircularProgressIndicator(),
-                ),
-        );
-      },
-    );
-  }
-}
-
-Widget buildPostItem(SocialPostsModel model, context, index) => Card(
+    return Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 5,
       child: Padding(
@@ -182,9 +105,7 @@ Widget buildPostItem(SocialPostsModel model, context, index) => Card(
                         child: const Text('#SalamaAhmed'),
                       ),
                     ),
-                    const SizedBox(
-                      width: 3,
-                    ),
+                    const SizedBox(width: 3),
                     SizedBox(
                       height: 20,
                       child: MaterialButton(
@@ -202,16 +123,20 @@ Widget buildPostItem(SocialPostsModel model, context, index) => Card(
                 ),
               ),
             ),
-            if (model.postImage != '') ...{
+            if (model.postImage != "") ...{
               Container(
                 height: 200,
                 width: double.infinity,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage('${model.postImage}'),
-                  ),
+                  // image: DecorationImage(
+                  //   fit: BoxFit.cover,
+                  //   image: NetworkImage('${model.postImage}'),
+                  // ),
+                ),
+                child: checkUrl(
+                  model.postImage ?? "no image",
                 ),
               ),
             },
@@ -337,3 +262,30 @@ Widget buildPostItem(SocialPostsModel model, context, index) => Card(
         ),
       ),
     );
+  }
+}
+
+Widget checkUrl(String url) {
+  try {
+    if (!url.contains("posts%")) return Image.network(url, fit: BoxFit.cover);
+
+    return const SizedBox(
+      height: 0,
+    );
+  } catch (e) {
+    return const Icon(Icons.image);
+  }
+}
+
+class CustomImages extends StatelessWidget {
+  final String imageUrl;
+  const CustomImages({super.key, required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImage(
+      imageUrl: imageUrl, 
+
+    );
+  }
+}

@@ -10,6 +10,7 @@ class SocialGetUserDataErrorState extends SocialStates {
   SocialGetUserDataErrorState(this.error);
 }
 class SocialLikePostSuccssState extends SocialStates {}
+class UpdatePostsStateAfterAddingPost extends SocialStates {}
 
 class SocialLikePostErrorState extends SocialStates {
   final String error;

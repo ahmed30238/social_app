@@ -43,7 +43,7 @@ class _ProfileImageViewState extends State<ProfileImageView> {
                 top: 10,
                 right: Localizations.localeOf(context).languageCode == "ar"
                     ? 10
-                    : 390,
+                    : MediaQuery.sizeOf(context).width *.9,
                 child: Visibility(
                   visible: isVisible,
                   child: SafeArea(
