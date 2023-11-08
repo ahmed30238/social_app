@@ -5,7 +5,7 @@ import 'package:fire_one/models/message_model.dart';
 import 'package:fire_one/models/posts.model.dart';
 import 'package:fire_one/models/social_model.dart';
 import 'package:fire_one/screens/chat_screen/chat_screen.dart';
-import 'package:fire_one/screens/home_screen/home_screen.dart';
+import 'package:fire_one/screens/home_screen/view/home_screen.dart';
 import 'package:fire_one/screens/post_screen/post_screen.dart';
 import 'package:fire_one/screens/settings_screen/setings_screen.dart';
 import 'package:fire_one/screens/users_screen/users_screen.dart';
@@ -18,8 +18,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:quick_log/quick_log.dart';
 
 class SocialCubit extends Cubit<SocialStates> {
+  Logger logger = const Logger("SocialCubit");
   SocialCubit() : super(SocialInitState());
 
   static SocialCubit get(context) => BlocProvider.of(context);
@@ -32,10 +34,6 @@ class SocialCubit extends Cubit<SocialStates> {
       bottomIndex = index;
 
       emit(SocialBottomNavBarState());
-    }
-
-    if (index == 1) {
-      getUsers();
     }
   }
 
@@ -88,7 +86,7 @@ class SocialCubit extends Cubit<SocialStates> {
       emit(SocialGetUserDataSuccessState());
     }).catchError((error) {
       emit(SocialGetUserDataErrorState(error.toString()));
-      print(error.toString());
+      logger.error(error.toString());
     });
   }
 
@@ -104,7 +102,7 @@ class SocialCubit extends Cubit<SocialStates> {
       profileImage = File(pickedFile.path);
       emit(SocialProfileImagePickedSuccessState());
     } else {
-      print('No image selected.');
+      logger.error('No image selected.');
       emit(SocialProfileImagePickedErrorState());
     }
   }
@@ -119,7 +117,7 @@ class SocialCubit extends Cubit<SocialStates> {
       coverImage = File(pickedFile.path);
       emit(SocialCoverImagePickedSuccessState());
     } else {
-      print('No image selected.');
+      logger.error('No image selected.');
       emit(SocialCoverImagePickedErrorState());
     }
   }
@@ -134,7 +132,7 @@ class SocialCubit extends Cubit<SocialStates> {
       postImage = File(pickedFile.path);
       emit(SocialPostImagePickedSuccessState());
     } else {
-      print('No image selected.');
+      logger.error('No image selected.');
       emit(SocialPostImagePickedErrorState());
     }
   }
@@ -166,10 +164,10 @@ class SocialCubit extends Cubit<SocialStates> {
             image: value,
             password: password);
       }).catchError((error) {
-        print(error.toString());
+        logger.error(error.toString());
       });
     }).catchError((error) {
-      print(error.toString());
+      logger.error(error.toString());
     });
   }
 
@@ -193,10 +191,10 @@ class SocialCubit extends Cubit<SocialStates> {
           cover: value,
         );
       }).catchError((error) {
-        print(error.toString());
+        logger.error(error.toString());
       });
     }).catchError((error) {
-      print(error.toString());
+      logger.error(error.toString());
     });
   }
 
@@ -232,7 +230,7 @@ class SocialCubit extends Cubit<SocialStates> {
     ).catchError(
       (error) {
         emit(SocialUpdateUserErrorState());
-        print(error.toString());
+        logger.error(error.toString());
       },
     );
   }
@@ -253,11 +251,11 @@ class SocialCubit extends Cubit<SocialStates> {
           postImage: value,
         );
       }).catchError((error) {
-        print(error.toString());
+        logger.error(error.toString());
         emit(SocialCreatePostErrorState());
       });
     }).catchError((error) {
-      print(error.toString());
+      logger.error(error.toString());
       emit(SocialCreatePostErrorState());
     });
   }
@@ -288,20 +286,34 @@ class SocialCubit extends Cubit<SocialStates> {
         )
         .then(
       (value) {
+        // updatePostsStateAfterAddingPost(postModel!);
         emit(SocialCreatePostSucessState());
         getPosts();
       },
     ).catchError(
       (error) {
         emit(SocialCreatePostErrorState());
-        print(error.toString());
+        logger.error(error.toString());
       },
     );
   }
 
-  var posts = [];
+  List<SocialPostsModel> posts = [];
   var postId = [];
   var noOfLikes = [];
+
+  // void updatePostsStateAfterAddingPost(SocialPostsModel post) {
+  //   int index = posts.indexWhere((element) => element.uId == post.uId);
+
+  //   if (index >= 0) {
+  //     // update post
+  //   } else {
+  //     posts.insert(index, element)
+  //     posts.add(SocialPostsModel.fromJson(post.toMap()));
+  //   }
+  //   emit(UpdatePostsStateAfterAddingPost());
+  // }
+
   void getPosts() {
     emit(SocialGetPostLoadingState());
     FirebaseFirestore.instance.collection('posts').get().then((value) {
@@ -310,7 +322,6 @@ class SocialCubit extends Cubit<SocialStates> {
         element.reference.collection('likes').get().then(
           (value) {
             posts.add(SocialPostsModel.fromJson(element.data()));
-
             noOfLikes.add(value.docs.length);
             postId.add(element.id);
             emit(SocialGetPostSuccessState());
@@ -322,7 +333,7 @@ class SocialCubit extends Cubit<SocialStates> {
         });
       }
     }).catchError((error) {
-      print(error.toString());
+      logger.error(error.toString());
       emit(
         SocialGetPostErrorState(error.toString()),
       );
@@ -340,7 +351,7 @@ class SocialCubit extends Cubit<SocialStates> {
       emit(SocialRemovePostSucessState());
       getPosts();
     }).catchError((error) {
-      print(
+      logger.error(
         error.toString(),
       );
       emit(SocialRemovePostErrorState());
@@ -370,7 +381,7 @@ class SocialCubit extends Cubit<SocialStates> {
     });
   }
 
-  var users = [];
+  List<SocialUserModel> users = [];
   void getUsers() {
     if (users.isEmpty) {
       FirebaseFirestore.instance.collection('users').get().then((value) {
@@ -425,7 +436,7 @@ class SocialCubit extends Cubit<SocialStates> {
         .collection('messages')
         .add(messageModel!.toMap())
         .then((value) {
-          // player.play();
+      // player.play();
       emit(SocialSendMessgaeSuccessState());
     }).catchError((error) {
       emit(SocialSendMessgaeErrorState());
