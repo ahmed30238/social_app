@@ -12,11 +12,11 @@ class CachHelper {
     if (value is String) return await sharedPreferences!.setString(key, value);
     if (value is int) return await sharedPreferences!.setInt(key, value);
     if (value is double) return await sharedPreferences!.setDouble(key, value);
-    return await sharedPreferences!.setBool(key, value);
+    return await sharedPreferences! .setBool(key, value);
   }
 
-  static dynamic getData({required String key, required String value}) {
-    return sharedPreferences!.get(key);
+  static dynamic getData({required String key}) {
+    return sharedPreferences?.get(key);
   }
 
   static Future<bool> removeData({

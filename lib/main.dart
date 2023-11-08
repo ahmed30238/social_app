@@ -1,9 +1,9 @@
-import 'package:fire_one/layout/home_layout.dart';
-import 'package:fire_one/observer/bserver.dart';
-import 'package:fire_one/screens/login_screen/loginscreen.dart';
+import 'package:fire_one/screens/splash_screen/view/splash_screen.dart';
+import 'package:fire_one/screens/splash_screen/view_model/cubit/splash_cubit.dart';
 import 'package:fire_one/shared/componets/components.dart';
 import 'package:fire_one/shared/constants/local/shared_pref.dart';
 import 'package:fire_one/shared/constants/local/vars.dart';
+import 'package:fire_one/shared/token_util/token_util.dart';
 import 'package:fire_one/social_cubit/cubit.dart';
 import 'package:fire_one/social_cubit/states.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,10 +20,6 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
-  // var token = await FirebaseMessaging.instance.getToken();
-  // print(token);
-
   FirebaseMessaging.onMessage.listen((event) {
     // print(event.data.toString());
     // print('on message');
@@ -43,52 +39,28 @@ void main(List<String> args) async {
   });
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
-  BlocOverrides.runZoned(
-    () async {
-      await CachHelper.init();
-
-      uId = CachHelper.getData(key: 'uId', value: uId ?? "");
-      Widget widget;
-      print('user is $user');
-      if (user != null) {
-        uId = user!.uid;
-        widget = const HomeLayout();
-      } else {
-        uId = '';
-        widget = SocialLoginScreen();
-      }
-      print(uId);
-
-// print(uId);
-      runApp(
-        MyApp(
-          startWidget: widget,
-        ),
-      );
-    },
-    blocObserver: MyBlocObserver(),
-  );
+  await CachHelper.init();
+  TokenUtil.loadTokenToMemory();
+  uId = await TokenUtil.getTokenFromMemory();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final Widget startWidget;
-
-  const MyApp({super.key, required this.startWidget});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => SocialCubit()
-      // ..getUserData()
-      // ..getPosts(),
-      ,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (BuildContext context) => SocialCubit()),
+        BlocProvider(create: (context) => SplashCubit()),
+      ],
       child: BlocConsumer<SocialCubit, SocialStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          return GetMaterialApp(
+          return const GetMaterialApp(
             debugShowCheckedModeBanner: false,
-            home: startWidget,
+            home: SplashScreen(),
           );
         },
       ),

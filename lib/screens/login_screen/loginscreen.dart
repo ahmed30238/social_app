@@ -3,8 +3,8 @@ import 'package:fire_one/screens/login_screen/social_app_login_cubit/cubit.dart'
 import 'package:fire_one/screens/login_screen/social_app_login_cubit/states.dart';
 import 'package:fire_one/screens/register_screen/register.dart';
 import 'package:fire_one/shared/componets/components.dart';
-import 'package:fire_one/shared/constants/local/shared_pref.dart';
 import 'package:fire_one/shared/constants/local/vars.dart';
+import 'package:fire_one/shared/token_util/token_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,7 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SocialLoginScreen extends StatelessWidget {
   SocialLoginScreen({Key? key}) : super(key: key);
 
- final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -175,14 +175,18 @@ class SocialLoginScreen extends StatelessWidget {
               email: emailController.text,
               password: passwordController.text,
             )
-                .then((value) {
-              // print(value.user);
+                .then(
+              (value) {
+                // print(value.user);
 
-              uId = value.user!.uid;
-              CachHelper.saveData(key: 'uId', value: uId);
-              navigateAndFinishTo(context, const HomeLayout());
-              // SocialCubit.get(context).getUserData();
-            });
+                // uId = value.user!.uid;
+                // CachHelper.saveData(key: 'uId', value: );
+                TokenUtil.saveToken(myToken: value.user?.uid ?? "");
+                uId = value.user?.uid ?? "";
+                navigateAndFinishTo(context, const HomeLayout());
+                // SocialCubit.get(context).getUserData();
+              },
+            );
           }
         },
       ),

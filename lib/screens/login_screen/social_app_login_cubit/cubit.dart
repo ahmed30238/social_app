@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:fire_one/screens/login_screen/social_app_login_cubit/states.dart';
+import 'package:fire_one/shared/token_util/token_util.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,8 +36,10 @@ class SocialLoginCubit extends Cubit<SocialLoginStates> {
       password: password,
     )
         .then((value) {
-      print(value.user!.email);
-      print(value.user!.uid);
+      log(value.user?.email ?? "");
+      log(value.user?.uid ?? "");
+
+      TokenUtil.saveToken(myToken: value.user?.uid ?? "");
       emit(
         SocialLoginScreenSuccessState(
           value.user!.uid,
