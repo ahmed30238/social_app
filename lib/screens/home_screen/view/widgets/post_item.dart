@@ -267,11 +267,12 @@ class PostItem extends StatelessWidget {
 
 Widget checkUrl(String url) {
   try {
-    if (!url.contains("posts%")) return Image.network(url, fit: BoxFit.cover);
+    // if (!url.contains("posts%"))
+     return Image.network(url, fit: BoxFit.cover);
 
-    return const SizedBox(
-      height: 0,
-    );
+    // return const SizedBox(
+    //   height: 0,
+    // );
   } catch (e) {
     return const Icon(Icons.image);
   }
