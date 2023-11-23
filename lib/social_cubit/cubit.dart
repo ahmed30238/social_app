@@ -32,7 +32,6 @@ class SocialCubit extends Cubit<SocialStates> {
       emit(SocialNewPostState());
     } else {
       bottomIndex = index;
-
       emit(SocialBottomNavBarState());
     }
   }
@@ -76,6 +75,16 @@ class SocialCubit extends Cubit<SocialStates> {
 
   SocialUserModel? userModel;
   SocialPostsModel? postModel;
+  File? profileImage;
+  var picker = ImagePicker();
+  List<SocialPostsModel> posts = [];
+  var postId = [];
+  var noOfLikes = [];
+  List<SocialUserModel> users = [];
+  List<SocialMessageModel> messages = [];
+  File? postImage;
+  File? coverImage;
+  SocialMessageModel? messageModel;
 
   // uId = CachHelper.getData(key: 'uId', value: userModel!.uId!);
   void getUserData() {
@@ -89,9 +98,6 @@ class SocialCubit extends Cubit<SocialStates> {
       logger.error(error.toString());
     });
   }
-
-  File? profileImage;
-  var picker = ImagePicker();
 
   Future<void> getProfileImage() async {
     final pickedFile = await picker.pickImage(
@@ -107,7 +113,6 @@ class SocialCubit extends Cubit<SocialStates> {
     }
   }
 
-  File? coverImage;
   Future<void> getCoverImage() async {
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
@@ -122,7 +127,6 @@ class SocialCubit extends Cubit<SocialStates> {
     }
   }
 
-  File? postImage;
   Future<void> getPostImage() async {
     final pickedFile = await picker.pickImage(
       source: ImageSource.gallery,
@@ -288,7 +292,7 @@ class SocialCubit extends Cubit<SocialStates> {
       (value) {
         // updatePostsStateAfterAddingPost(postModel!);
         emit(SocialCreatePostSucessState());
-        getPosts();
+        getThePosts();
       },
     ).catchError(
       (error) {
@@ -297,10 +301,6 @@ class SocialCubit extends Cubit<SocialStates> {
       },
     );
   }
-
-  List<SocialPostsModel> posts = [];
-  var postId = [];
-  var noOfLikes = [];
 
   // void updatePostsStateAfterAddingPost(SocialPostsModel post) {
   //   int index = posts.indexWhere((element) => element.uId == post.uId);
@@ -314,42 +314,61 @@ class SocialCubit extends Cubit<SocialStates> {
   //   emit(UpdatePostsStateAfterAddingPost());
   // }
 
-  void getPosts() {
+  void getThePosts() async {
     emit(SocialGetPostLoadingState());
-    FirebaseFirestore.instance.collection('posts').get().then((value) {
-      for (var element in value.docs) {
-        posts = [];
-        element.reference.collection('likes').get().then(
-          (value) {
-            posts.add(SocialPostsModel.fromJson(element.data()));
-            noOfLikes.add(value.docs.length);
-            postId.add(element.id);
-            emit(SocialGetPostSuccessState());
-          },
-        ).catchError((error) {
-          emit(
-            SocialGetPostErrorState(error.toString()),
-          );
-        });
-      }
-    }).catchError((error) {
-      logger.error(error.toString());
-      emit(
-        SocialGetPostErrorState(error.toString()),
-      );
-    });
+    var postCollection =
+        await FirebaseFirestore.instance.collection("posts").get();
+      posts = [];
+    for (var post in postCollection.docs) {
+      // var likesCollection =
+          post.reference.collection('likes').get().then((value) {
+        posts.add(
+          SocialPostsModel.fromJson(post.data()),
+        );
+        noOfLikes.add(value.docs.length);
+        postId.add(post.id);
+      });
+    }
+      emit(SocialGetPostSuccessState());
   }
+
+  // void getPosts() {
+  //   emit(SocialGetPostLoadingState());
+  //   FirebaseFirestore.instance.collection('posts').get().then((value) {
+  //     for (var element in value.docs) {
+  //       posts = [];
+  //       element.reference.collection('likes').get().then(
+  //         (value) {
+  //           posts.add(SocialPostsModel.fromJson(element.data()));
+  //           noOfLikes.add(value.docs.length);
+  //           postId.add(element.id);
+  //           emit(SocialGetPostSuccessState());
+  //         },
+  //       ).catchError((error) {
+  //         emit(
+  //           SocialGetPostErrorState(error.toString()),
+  //         );
+  //       });
+  //     }
+  //   }).catchError((error) {
+  //     logger.error(error.toString());
+  //     emit(
+  //       SocialGetPostErrorState(error.toString()),
+  //     );
+  //   });
+  // }
 
   void removePost({
     required String postId,
   }) {
+    // posts.removeWhere((element) => element.uId == postId);
     FirebaseFirestore.instance
         .collection('posts')
         .doc(postId)
         .delete()
         .then((value) {
       emit(SocialRemovePostSucessState());
-      getPosts();
+      // getThePosts();
     }).catchError((error) {
       logger.error(
         error.toString(),
@@ -381,7 +400,6 @@ class SocialCubit extends Cubit<SocialStates> {
     });
   }
 
-  List<SocialUserModel> users = [];
   void getUsers() {
     if (users.isEmpty) {
       FirebaseFirestore.instance.collection('users').get().then((value) {
@@ -397,7 +415,6 @@ class SocialCubit extends Cubit<SocialStates> {
     }
   }
 
-  SocialMessageModel? messageModel;
   void sendMessage({
     required String receiverId,
     required String dateTime,
@@ -442,8 +459,6 @@ class SocialCubit extends Cubit<SocialStates> {
       emit(SocialSendMessgaeErrorState());
     });
   }
-
-  List<SocialMessageModel> messages = [];
 
   void getMesages({
     required String receiverId,

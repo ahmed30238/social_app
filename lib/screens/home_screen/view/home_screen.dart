@@ -15,7 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     SocialCubit.get(context).getUserData();
-    SocialCubit.get(context).getPosts();
+    SocialCubit.get(context).getThePosts();
     super.initState();
   }
 

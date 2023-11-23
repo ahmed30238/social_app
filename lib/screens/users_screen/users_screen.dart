@@ -2,7 +2,9 @@ import 'package:fire_one/models/social_model.dart';
 import 'package:fire_one/screens/chat_screen/chat_screen.dart';
 import 'package:fire_one/shared/extensions/sized_box.dart';
 import 'package:fire_one/social_cubit/cubit.dart';
+import 'package:fire_one/social_cubit/states.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UsersScreen extends StatefulWidget {
   const UsersScreen({Key? key}) : super(key: key);
@@ -17,18 +19,28 @@ class _UsersScreenState extends State<UsersScreen> {
     SocialCubit.get(context).getUsers();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.separated(
-        itemBuilder: (context, index) =>
-            SocialCubit.get(context).users[index].uId != null
-                ? UserItem(
-                    model: SocialCubit.get(context).users[index],
-                  )
-                : 0.ph,
-        separatorBuilder: (context, index) => 10.ph,
-        itemCount: SocialCubit.get(context).users.length,
+      body: BlocBuilder<SocialCubit, SocialStates>(
+        builder: (context, state) {
+          var cubit = SocialCubit.get(context);
+          if (cubit.users.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return ListView.separated(
+              itemBuilder: (context, index) =>
+                  SocialCubit.get(context).users[index].uId != null
+                      ? UserItem(
+                          model: SocialCubit.get(context).users[index],
+                        )
+                      : 0.ph,
+              separatorBuilder: (context, index) => 10.ph,
+              itemCount: SocialCubit.get(context).users.length,
+            );
+          }
+        },
       ),
     );
   }
